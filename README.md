@@ -85,7 +85,7 @@ Resultado de la auditoría: El log confirmó una intercepción exitosa. El motor
 ```
 <img width="1046" height="539" alt="image" src="https://github.com/user-attachments/assets/2e67d7ca-80eb-4ade-b7be-68b1f4a262f9" />
 
-(Opcional): Para mantener la compatibilidad con scripts de evaluación heredados, se instaló el demonio clásico de logs:
+Para mantener la compatibilidad con scripts de evaluación heredados, se instaló el demonio clásico de logs:
 
 ```Bash
 apt install rsyslog
