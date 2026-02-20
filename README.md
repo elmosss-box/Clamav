@@ -49,6 +49,7 @@ Archivo modificado: /etc/clamav/clamav-milter.conf
 <div align="center">
 <img width="600" alt="Archivo conf parte 1" src="https://github.com/user-attachments/assets/148ffee2-b090-4da5-800a-86d6352d3601" />
 </div>
+
 ```
 MilterSocket inet:7357@127.0.0.1
 ```
