@@ -1,5 +1,5 @@
 Markdown
-# Implementación de Seguridad Perimetral: Postfix + ClamAV-Milter en Debian
+# Postfix + ClamAV-Milter en Debian
 
 Este repositorio documenta la integración de un motor antivirus (ClamAV) en un servidor de correo existente (Postfix/Dovecot) desplegado sobre Debian Linux, utilizando la arquitectura de filtrado de correo (Milter).
 
@@ -23,7 +23,7 @@ systemctl start clamav-freshclam
 ```
 (Captura de la actualización de firmas exitosa)
 
-3. Configuración del Puente de Red (Milter)
+## 3. Configuración del Puente de Red (Milter)
 Para evitar problemas de permisos de archivos (chroot), se configuró el Milter para escuchar a través de un socket TCP local en lugar de un socket Unix.
 
 Archivo modificado: /etc/clamav/clamav-milter.conf
@@ -33,7 +33,7 @@ MilterSocket inet:7357@127.0.0.1
 ```
 (Captura de la modificación del archivo clamav-milter.conf)
 
-4. Integración en el MTA (Postfix)
+## 4. Integración en el MTA (Postfix)
 Se modificó el núcleo del servidor de correo para desviar el tráfico entrante y saliente hacia el puerto del Milter.
 
 Archivo modificado: /etc/postfix/main.cf
@@ -63,7 +63,7 @@ ss -tlnp | grep 7357
 ```
 (Captura del servicio escuchando en el puerto local y la IP asignada 10.0.0.50)
 
-5. Auditoría y Pruebas de Intercepción (Prueba EICAR)
+## 5. Auditoría y Pruebas de Intercepción (Prueba EICAR)
 Para validar el entorno, se generó un archivo inofensivo con la firma de prueba estándar internacional EICAR.
 (Captura de la creación del archivo pruebavirus.txt)
 
