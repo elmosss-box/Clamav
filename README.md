@@ -16,10 +16,11 @@ apt install clamav clamav-daemon clamav-milter
 ```
 Posteriormente, se forzó una actualización manual de la base de datos de firmas de virus (CVD) deteniendo temporalmente el servicio de actualización automática:
 
-Bash
+```Bash
 systemctl stop clamav-freshclam
 freshclam
 systemctl start clamav-freshclam
+```
 (Captura de la actualización de firmas exitosa)
 
 3. Configuración del Puente de Red (Milter)
@@ -27,8 +28,9 @@ Para evitar problemas de permisos de archivos (chroot), se configuró el Milter 
 
 Archivo modificado: /etc/clamav/clamav-milter.conf
 
-Plaintext
+```Plaintext
 MilterSocket inet:7357@127.0.0.1
+```
 (Captura de la modificación del archivo clamav-milter.conf)
 
 4. Integración en el MTA (Postfix)
@@ -36,26 +38,29 @@ Se modificó el núcleo del servidor de correo para desviar el tráfico entrante
 
 Archivo modificado: /etc/postfix/main.cf
 
-Plaintext
+```Plaintext
 smtpd_milters = inet:127.0.0.1:7357
 non_smtpd_milters = inet:127.0.0.1:7357
 milter_default_action = accept
+```
 Decisión de Diseño: Se configuró milter_default_action = accept. En caso de que el demonio de ClamAV colapse, Postfix continuará procesando correos sin escanear, priorizando la disponibilidad del servicio sobre el bloqueo preventivo.
 
 (Captura de la configuración de main.cf)
 
 A continuación, se reiniciaron los servicios para aplicar los cambios:
 
-Bash
+```Bash
 systemctl restart clamav-daemon
 systemctl restart clamav-milter
 systemctl restart postfix
+```
 (Captura del reinicio de servicios)
 
 Se verificó mediante el uso de sockets que el servicio estaba a la escucha en el puerto correcto (127.0.0.1:7357):
 
-Bash
+```Bash
 ss -tlnp | grep 7357
+```
 (Captura del servicio escuchando en el puerto local y la IP asignada 10.0.0.50)
 
 5. Auditoría y Pruebas de Intercepción (Prueba EICAR)
@@ -70,13 +75,15 @@ Durante la auditoría, se evidenció que las distribuciones modernas de Debian p
 
 Se interrogó al Journal con la siguiente instrucción para confirmar la detección:
 
-Bash
+```Bash
 journalctl | grep -iE 'clamav|milter|eicar' | tail -n 20
 Resultado de la auditoría: El log confirmó una intercepción exitosa. El motor detectó la amenaza (Eicar-Signature FOUND) y ordenó a Postfix la retención del mensaje (quarantined by clamav-milter).
+```
 (Captura del log confirmando la detección y cuarentena del virus)
 
 (Opcional): Para mantener la compatibilidad con scripts de evaluación heredados, se instaló el demonio clásico de logs:
 
-Bash
+```Bash
 apt install rsyslog
+```
 (Captura de la instalación del paquete rsyslog)
