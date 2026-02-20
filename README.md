@@ -13,7 +13,7 @@ Se instalaron el motor base, el demonio residente y el intermediario (milter) qu
 apt update
 apt install clamav clamav-daemon clamav-milter
 (Captura de la instalación de los paquetes)
-
+```
 Posteriormente, se forzó una actualización manual de la base de datos de firmas de virus (CVD) deteniendo temporalmente el servicio de actualización automática:
 
 Bash
